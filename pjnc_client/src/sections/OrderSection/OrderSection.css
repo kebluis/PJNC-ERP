@@ -1,0 +1,11 @@
+.order-container {
+    background-color: transparent;
+    color: #fff;
+    margin: 0 8px;
+    border: none!important;
+}
+
+.order-create {
+    text-align: end;
+    margin: 0 0 1rem;
+}
