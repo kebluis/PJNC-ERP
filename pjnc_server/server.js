@@ -18,18 +18,12 @@ app.use(express.json());
 // Import API route
 const orderRoutes = require('./routes/orderRoute');
 const customerRoutes = require('./routes/customerRoute');
+const productRoutes = require('./routes/productRoute');
 
 //importing route
 orderRoutes(app);
 customerRoutes(app);
-
-// // Add endpoint
-// app.get('/', (req, res) => {
-// 	res.json({
-// 		name: 'kevin',
-// 		age: '28',
-// 	});
-// });
+productRoutes(app);
 
 // Listen to server
 app.listen(port, () => {
