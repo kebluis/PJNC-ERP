@@ -12,9 +12,9 @@ const GenericDropdown = ({ options, selected, changed, focus }) => {
 			}
 			className="full-width"
 			autoFocus={focus}
-			defaultValue={selected}
+			value={selected}
 			onChange={changed}>
-			{options &&
+			{options.length > 0 &&
 				options.map((data) => {
 					return <Option value={data.key}>{data.label}</Option>;
 				})}

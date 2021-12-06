@@ -5,19 +5,13 @@ export const newOrderForm = [
 		label: 'CUSTOMER NAME',
 		dataIndex: 'customerName',
 		type: 'select',
-		options: [
-			{ key: 0, label: 'first' },
-			{ key: 1, label: 'second' },
-		],
+		options: 'customers',
 	},
 	{
 		label: 'LOCATION',
 		dataIndex: 'location',
-		type: 'select',
-		options: [
-			{ key: 0, label: 'first' },
-			{ key: 1, label: 'second' },
-		],
+		type: 'text',
+		options: 'customers',
 	},
 	{
 		label: 'DELIVERY DATE',
@@ -38,20 +32,17 @@ export const newOrderForm = [
 		label: 'ITEM',
 		dataIndex: 'item',
 		type: 'select',
-		options: [
-			{ key: 0, label: 'first' },
-			{ key: 1, label: 'second' },
-		],
+		options: 'products',
 	},
 	{
 		label: 'CUSTOMER PRICE',
 		dataIndex: 'customerPrice',
-		type: 'amount',
+		type: 'text',
 	},
 	{
 		label: 'TOTAL PRICE',
 		dataIndex: 'totalPrice',
-		type: 'amount',
+		type: 'text',
 	},
 ];
 export const newOrderTable = [

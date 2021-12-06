@@ -12,7 +12,7 @@ const InputControl = (props) => {
 				<Select
 					focus={dataIndex === 'customerName'}
 					selected={data[dataIndex]}
-					options={options}
+					options={options ?? []}
 					changed={changed}
 					onKeyDown={autoSubmit}
 					value={data}
@@ -83,7 +83,7 @@ const InputControl = (props) => {
 			);
 			break;
 		default:
-			input = null;
+			input = <div>{data[dataIndex]}</div>;
 			break;
 	}
 	return input;

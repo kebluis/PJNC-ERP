@@ -23,25 +23,6 @@ const GenericModal = ({
 			visible={show}
 			onOk={handleOk}
 			onCancel={handleCancel}>
-			<Form>
-				<Row gutter={100}>
-					{formContent.map((comp, i) => {
-						return (
-							<Col span={6} key={i} className="modal-margin">
-								<label>{comp.label}</label>
-								<Input
-									data={valueHolder}
-									dataIndex={comp.dataIndex}
-									type={comp.type}
-									options={comp.options ?? null}
-									changed={(e) => changeHandler(e, comp)}
-									autoSubmit={onSubmit}
-								/>
-							</Col>
-						);
-					})}
-				</Row>
-			</Form>
 			{children}
 		</Modal>
 	);

@@ -16,6 +16,10 @@ const ProductSchema = new Schema({
 		type: String,
 		required: true,
 	},
+	productStock: {
+		type: String,
+		required: true,
+	},
 });
 
 // create and export model

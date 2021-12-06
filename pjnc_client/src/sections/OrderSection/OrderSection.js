@@ -2,22 +2,25 @@ import React, { useEffect, useState } from 'react';
 import './OrderSection.css';
 
 import Hotkeys from 'react-hot-keys';
-import { Card, message } from 'antd';
+import { Card, message, Form, Row, Col } from 'antd';
 
 import GenericButton from '../../components/GenericButton';
 import GenericTable from '../../components/table/GenericTable';
 import GenericModal from '../../components/modal/GenericModal';
+import Input from '../../components/InputControl';
 
 import orderTableModel from '../../models/orderTableModel';
 import { newOrderForm, newOrderTable } from '../../models/newOrderModel';
 
 import { getOrder, postOrder } from '../../services/ordersConsume';
 import { getCustomer } from '../../services/customersConsume';
+import { getProduct } from '../../services/productsConsume';
 import moment from 'moment';
 
 const OrderSection = () => {
 	const [orderData, setOrderData] = useState([]);
 	const [customerData, setCustomerData] = useState([]);
+	const [productData, setProductData] = useState([]);
 	const [showCreate, setShowCreate] = useState(false);
 	const [listOrder, setListOrder] = useState({
 		customerName: null,
@@ -28,6 +31,7 @@ const OrderSection = () => {
 		customerPrice: null,
 		totalPrice: null,
 	});
+	const [options, setOptions] = useState({});
 	const [newOrderData, setNewOrderData] = useState([]);
 
 	useEffect(() => {
@@ -49,25 +53,89 @@ const OrderSection = () => {
 		if (showCreate) {
 			getCustomer().then((res) => {
 				setCustomerData(res.data);
+				setOptions((prev) => {
+					return {
+						...prev,
+						customerName: res.data.map((item, i) => {
+							return { key: i, label: item.customerName };
+						}),
+					};
+				});
+				getProduct().then((res) => {
+					setProductData(res.data);
+
+					setOptions((prev) => {
+						return {
+							...prev,
+							item: res.data.map((item, i) => {
+								return { key: i, label: item.productName };
+							}),
+						};
+					});
+				});
 			});
 		}
 	}, [showCreate]);
 
-	const listNewOrder = (e, comp) => {
-		return setListOrder((prev) => {
+	useEffect(() => {
+		setListOrder((prev) => {
 			return {
 				...prev,
-				[comp.dataIndex]:
-					comp.type === 'select'
-						? comp.options[e].label
-						: comp.type === 'calendar' || comp.type === 'time'
-						? e?._d ?? moment(new Date())
-						: e,
+				unit: null,
+				item: null,
+				customerPrice: null,
+				totalPrice: null,
 			};
 		});
+	}, [listOrder.customerName]);
+
+	const listNewOrder = (e, comp) => {
+		setListOrder((prev) => {
+			return {
+				...prev,
+				customerName:
+					comp.dataIndex === 'customerName'
+						? customerData.map((cst) => cst.customerName)[e]
+						: prev.customerName,
+				item: comp.dataIndex === 'item' ? options.item[e].label : prev.item,
+				location:
+					comp.dataIndex === 'customerName'
+						? customerData.map((cst) => cst.location)[e]
+						: prev.location,
+				customerPrice:
+					comp.dataIndex === 'item'
+						? customerData.filter(
+								(cst) => cst.customerName === listOrder.customerName
+						  )[0]?.customerPrice
+							? customerData.filter(
+									(cst) => cst.customerName === listOrder.customerName
+							  )[0]?.customerPrice[options.item[e].label]?.price ??
+							  productData[e].originalPrice
+							: productData[e].originalPrice
+						: prev.customerPrice,
+				unit: comp.dataIndex === 'unit' ? e : prev.unit,
+				totalPrice:
+					comp.dataIndex === 'unit' && prev.customerPrice
+						? e * Number(prev.customerPrice)
+						: comp.dataIndex === 'item' && prev.unit
+						? customerData.filter(
+								(cst) => cst.customerName === listOrder.customerName
+						  )[0]?.customerPrice
+							? (customerData.filter(
+									(cst) => cst.customerName === listOrder.customerName
+							  )[0]?.customerPrice[options.item[e].label]?.price ??
+									productData[e].originalPrice) * prev.unit
+							: productData[e].originalPrice * prev.unit
+						: null,
+				deliveryDate:
+					comp.dataIndex === 'deliveryDate' ? e._d : prev.deliveryDate,
+			};
+		});
+		console.log(productData);
 	};
 
 	const addToTable = (event) => {
+		console.log(options);
 		const validation = Object.keys(listOrder).map((order) => {
 			return listOrder[order] === null;
 		});
@@ -113,14 +181,28 @@ const OrderSection = () => {
 				}}>
 				<GenericModal
 					title="Create New Order"
-					customerData={customerData}
 					show={showCreate}
 					handleCancel={() => setShowCreate(false)}
-					handleOk={() => postNewOrder()}
-					changeHandler={(e, comp) => listNewOrder(e, comp)}
-					formContent={newOrderForm}
-					valueHolder={listOrder}
-					onSubmit={addToTable}>
+					handleOk={() => postNewOrder()}>
+					<Form>
+						<Row gutter={100}>
+							{newOrderForm.map((comp, i) => {
+								return (
+									<Col span={6} key={i} className="modal-margin">
+										<label>{comp.label}</label>
+										<Input
+											data={listOrder}
+											dataIndex={comp.dataIndex}
+											type={comp.type}
+											options={options[comp.dataIndex]}
+											changed={(e) => listNewOrder(e, comp)}
+											autoSubmit={addToTable}
+										/>
+									</Col>
+								);
+							})}
+						</Row>
+					</Form>
 					<div className="order-create">
 						<GenericButton click={addToTable}>+ ADD</GenericButton>
 					</div>
