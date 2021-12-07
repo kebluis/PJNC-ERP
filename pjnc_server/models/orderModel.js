@@ -28,6 +28,10 @@ const OrderSchema = new Schema({
 		type: String,
 		required: true,
 	},
+	order: {
+		type: Array,
+		required: true,
+	},
 });
 
 // create and export model

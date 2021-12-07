@@ -9,6 +9,15 @@ require('./config/db');
 // create express app
 const app = express();
 
+var cors = require('cors');
+
+const corsOptions = {
+	origin: 'http://example.com',
+	optionsSuccessStatus: 200,
+};
+
+app.use(cors());
+
 // define port to run express app
 const port = process.env.PORT || 5000;
 
