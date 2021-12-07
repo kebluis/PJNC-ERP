@@ -35,18 +35,7 @@ const OrderSection = () => {
 	const [newOrderData, setNewOrderData] = useState([]);
 
 	useEffect(() => {
-		getOrder().then((res) => {
-			const orderData = [];
-			res.data.map((order) => {
-				return orderData.push({
-					...order,
-					customerId: order.customer._id,
-					customerName: order.customer.customerName,
-					location: order.customer.location,
-				});
-			});
-			setOrderData(orderData);
-		});
+		getOrderData();
 	}, []);
 
 	useEffect(() => {
@@ -87,7 +76,30 @@ const OrderSection = () => {
 				totalPrice: null,
 			};
 		});
+		setNewOrderData([]);
 	}, [listOrder.customerName]);
+
+	const getOrderData = () => {
+		getOrder().then((res) => {
+			const orderData = [];
+			res.data.map((order) => {
+				return orderData.push({
+					...order,
+					customerId: order.customer._id,
+					customerName: order.customer.customerName,
+					location: order.customer.location,
+				});
+			});
+			setOrderData(orderData);
+		});
+	};
+
+	const sortLatestToTop = (arr) => {
+		return arr.reduceRight(function (previous, current) {
+			previous.push(current);
+			return previous;
+		}, []);
+	};
 
 	const listNewOrder = (e, comp) => {
 		setListOrder((prev) => {
@@ -128,7 +140,9 @@ const OrderSection = () => {
 							: productData[e].originalPrice * prev.unit
 						: null,
 				deliveryDate:
-					comp.dataIndex === 'deliveryDate' ? e._d : prev.deliveryDate,
+					comp.dataIndex === 'deliveryDate'
+						? e?._d ?? new Date()
+						: prev.deliveryDate ?? new Date(),
 			};
 		});
 		console.log(productData);
@@ -167,8 +181,35 @@ const OrderSection = () => {
 		// 	_id: null,
 		// 	customer:
 		// }
-		debugger;
-		// return postOrder();
+		let test = 0;
+		const payload = {
+			_id: null,
+			totalPrice: newOrderData.map((item) => {
+				return (test += Number(item.totalPrice));
+			})[newOrderData.length - 1],
+			amountPaid: 0,
+			deliveryDate: listOrder.deliveryDate,
+			status: 'Processing',
+			customer:
+				customerData[
+					customerData.findIndex(
+						(item) => item.customerName === listOrder.customerName
+					)
+				]._id,
+			order: newOrderData.map((item) => {
+				return {
+					productName: item.item,
+					unit: item.unit,
+					totalPrice: item.totalPrice,
+				};
+			}),
+		};
+		console.log(payload);
+		postOrder(payload).then((res) => {
+			console.log(res);
+			getOrderData();
+			setShowCreate(false);
+		});
 	};
 
 	return (
@@ -208,7 +249,7 @@ const OrderSection = () => {
 					</div>
 					<GenericTable
 						columns={newOrderTable}
-						data={newOrderData}
+						data={sortLatestToTop(newOrderData)}
 						pagination={{
 							defaultPageSize: 3,
 							pageSize: 3,
@@ -226,7 +267,15 @@ const OrderSection = () => {
 						</GenericButton>
 					</div>
 					<div>
-						<GenericTable columns={orderTableModel} data={orderData} />
+						<GenericTable
+							columns={orderTableModel}
+							data={sortLatestToTop(orderData)}
+							pagination={{
+								defaultPageSize: 4,
+								pageSize: 4,
+								size: 'small',
+							}}
+						/>
 					</div>
 				</Card>
 			</Hotkeys>
