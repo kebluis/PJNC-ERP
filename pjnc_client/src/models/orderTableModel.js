@@ -1,5 +1,4 @@
 import GenericDropDown from '../components/GenericDropDown';
-import { Menu } from 'antd';
 
 const orderColumns = [
 	{

@@ -15,7 +15,6 @@ import { newOrderForm, newOrderTable } from '../../models/newOrderModel';
 import { getOrder, postOrder } from '../../services/ordersConsume';
 import { getCustomer } from '../../services/customersConsume';
 import { getProduct } from '../../services/productsConsume';
-import moment from 'moment';
 
 const OrderSection = () => {
 	const [orderData, setOrderData] = useState([]);
@@ -63,6 +62,18 @@ const OrderSection = () => {
 					});
 				});
 			});
+		} else {
+			setListOrder((prev) => {
+				return {
+					...prev,
+					customerName: null,
+					unit: null,
+					item: null,
+					customerPrice: null,
+					totalPrice: null,
+				};
+			});
+			setNewOrderData([]);
 		}
 	}, [showCreate]);
 
@@ -177,10 +188,6 @@ const OrderSection = () => {
 		console.log(customerData);
 		console.log(listOrder);
 		console.log(newOrderData);
-		// const payload = {
-		// 	_id: null,
-		// 	customer:
-		// }
 		let test = 0;
 		const payload = {
 			_id: null,
@@ -210,6 +217,9 @@ const OrderSection = () => {
 			getOrderData();
 			setShowCreate(false);
 		});
+	};
+	const onClickOrder = (event, data, index) => {
+		debugger;
 	};
 
 	return (
@@ -268,6 +278,7 @@ const OrderSection = () => {
 					</div>
 					<div>
 						<GenericTable
+							click={onClickOrder}
 							columns={orderTableModel}
 							data={sortLatestToTop(orderData)}
 							pagination={{
