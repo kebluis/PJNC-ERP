@@ -274,7 +274,6 @@ const OrderSection = () => {
 		setShowCreate(true);
 		setEditFlag(true);
 		setListOrder((prev) => {
-			debugger;
 			return {
 				...prev,
 				_id: data._id,
@@ -306,7 +305,7 @@ const OrderSection = () => {
 	};
 
 	const onPrintOrder = (e) => {
-		debugger;
+		console.log('Print Receipt');
 	};
 
 	const deleteOrder = (data) => {
