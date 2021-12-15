@@ -4,7 +4,8 @@ import { Input, TimePicker, DatePicker, InputNumber } from 'antd';
 import moment from 'moment';
 
 const InputControl = (props) => {
-	const { type, options, data, dataIndex, changed, autoSubmit } = props;
+	const { type, options, data, dataIndex, changed, autoSubmit, disabled } =
+		props;
 	let input = null;
 	switch (type) {
 		case 'select':
@@ -16,6 +17,7 @@ const InputControl = (props) => {
 					changed={changed}
 					onKeyDown={autoSubmit}
 					value={data}
+					disabled={disabled}
 				/>
 			);
 			break;

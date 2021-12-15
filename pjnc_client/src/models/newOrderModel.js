@@ -1,4 +1,4 @@
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 
 export const newOrderForm = [
 	{
@@ -45,42 +45,48 @@ export const newOrderForm = [
 		type: 'text',
 	},
 ];
-export const newOrderTable = [
-	{
-		title: 'UNIT',
-		dataIndex: 'unit',
-		key: 'unit',
-		responsive: ['sm'],
-	},
-	{
-		title: 'ITEM',
-		dataIndex: 'item',
-		key: 'item',
-		responsive: ['sm'],
-	},
-	{
-		title: 'CUSTOMER PRICE',
-		dataIndex: 'customerPrice',
-		key: 'customerPrice',
-		responsive: ['sm'],
-	},
-	{
-		title: 'TOTAL PRICE',
-		dataIndex: 'totalPrice',
-		key: 'totalPrice',
-		responsive: ['sm'],
-	},
-	{
-		title: 'ACTION',
-		key: 'action',
-		responsive: ['sm'],
-		render: (data) => {
-			return (
-				<>
-					<EditOutlined />
-					<DeleteOutlined />
-				</>
-			);
+export const newOrderTable = (onDelete) => {
+	return [
+		{
+			title: 'UNIT',
+			dataIndex: 'unit',
+			key: 'unit',
+			responsive: ['sm'],
 		},
-	},
-];
+		{
+			title: 'ITEM',
+			dataIndex: 'item',
+			key: 'item',
+			responsive: ['sm'],
+		},
+		{
+			title: 'CUSTOMER PRICE',
+			dataIndex: 'customerPrice',
+			key: 'customerPrice',
+			responsive: ['sm'],
+		},
+		{
+			title: 'TOTAL PRICE',
+			dataIndex: 'totalPrice',
+			key: 'totalPrice',
+			responsive: ['sm'],
+		},
+		{
+			title: 'ACTION',
+			key: 'action',
+			responsive: ['sm'],
+			render: (data) => {
+				return (
+					<>
+						<DeleteOutlined
+							onClick={(e) => {
+								e.stopPropagation();
+								onDelete(data);
+							}}
+						/>
+					</>
+				);
+			},
+		},
+	];
+};

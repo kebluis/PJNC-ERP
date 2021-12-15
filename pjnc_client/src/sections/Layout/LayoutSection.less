@@ -1,10 +1,11 @@
+@import '~antd/dist/antd.dark.less';
+
 .layout-container {
     width: 100%;
 }
 .layout-header{
-        background-color: #f0f2f5;
-        color: #000;
-        margin: 8px;
+        color: #fff;
+        margin: 1rem;
         padding: 0 1rem 1rem;
         text-align: end;
         border: solid 1px transparent;
@@ -14,22 +15,18 @@
         margin: 0 8px 8px;
 }
 .layout-content{
-        background-color: #fff;
+        background-color: #141414;
         color: #000;
-        margin: 0 8px 8px;
+        margin: 0 1rem 1rem;
         border: solid 1px #001529;
         border-radius: 20px;
 }
 .layout-content-title{
         text-align: start;
         padding: 8px 1rem;
-        background-color: #001529;
+        background-color: @primary-color;
         border: solid 1px transparent;
         border-radius: 20px 20px 0 0;
-}
-.layout-footer{
-        background-color: #f0f2f5;
-        color: #000
 }
 .layout-icons {
         margin: 0px 4px;

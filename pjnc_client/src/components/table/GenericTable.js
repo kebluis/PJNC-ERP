@@ -1,10 +1,17 @@
 import { Table } from 'antd';
-import './GenericTable.css';
+import styles from './GenericTable.less';
 
-const GenericTable = ({ columns, data, pagination }) => {
+const GenericTable = ({ columns, data, pagination, click }) => {
 	return (
 		<Table
-			className="table-content"
+			className={styles.table_content}
+			onRow={(record, rowIndex) => {
+				return {
+					onClick: (event) => {
+						click(event, record, rowIndex);
+					},
+				};
+			}}
 			columns={columns}
 			dataSource={data}
 			pagination={pagination ?? {}}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './LayoutSection.css';
+import './LayoutSection.less';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Layout, Menu, Avatar, Tooltip } from 'antd';
 import {
