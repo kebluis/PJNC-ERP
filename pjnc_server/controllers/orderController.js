@@ -2,14 +2,19 @@
 const Order = require('../models/orderModel');
 
 // DEFINE CONTROLLER FUNCTIONS
-
+const sortLatestToTop = (arr) => {
+	return arr.reduceRight(function (previous, current) {
+		previous.push(current);
+		return previous;
+	}, []);
+};
 // listAllOrders function - To list all orders
 exports.listAllOrders = (req, res) => {
 	Order.find()
 		.populate('customer')
 		.then((data) => {
 			console.log(data);
-			res.status(200).json(data);
+			res.status(200).json(sortLatestToTop(data));
 		});
 };
 

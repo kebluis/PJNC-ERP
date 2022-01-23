@@ -396,7 +396,7 @@ const OrderSection = () => {
 						<GenericTable
 							click={onClickOrder}
 							columns={orderTableModel(onPrintOrder)}
-							data={sortLatestToTop(orderData)}
+							data={orderData}
 							pagination={{
 								defaultPageSize: 4,
 								pageSize: 4,

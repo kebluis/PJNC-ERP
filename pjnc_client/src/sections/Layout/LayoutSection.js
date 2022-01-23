@@ -64,7 +64,13 @@ const LayoutSection = () => {
 					</Header>
 					<Content className="layout-content">
 						<div>
-							<h1 className="layout-content-title">Order Page</h1>
+							<h1 className="layout-content-title">
+								{Number(keySection) === 1
+									? 'Order Page'
+									: Number(keySection) === 2
+									? 'Customer Page'
+									: 'Product Page'}
+							</h1>
 
 							{Number(keySection) === 1 && <OrderSection />}
 							{Number(keySection) === 2 && <CustomerSection />}

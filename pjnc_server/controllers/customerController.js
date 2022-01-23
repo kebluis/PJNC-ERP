@@ -2,14 +2,19 @@
 const Customer = require('../models/customerModel');
 
 // DEFINE CONTROLLER FUNCTIONS
-
+const sortLatestToTop = (arr) => {
+	return arr.reduceRight(function (previous, current) {
+		previous.push(current);
+		return previous;
+	}, []);
+};
 // listAllCustomers function - To list all customers
 exports.listAllCustomers = (req, res) => {
 	Customer.find({}, (err, customer) => {
 		if (err) {
 			res.status(500).send(err);
 		}
-		res.status(200).json(customer);
+		res.status(200).json(sortLatestToTop(customer));
 	});
 };
 

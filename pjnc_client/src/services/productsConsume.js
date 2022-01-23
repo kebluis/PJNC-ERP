@@ -8,8 +8,11 @@ export function postProduct(payload) {
 	return axios.post(`${process.env.REACT_APP_SERVICE_URL}/products`, payload);
 }
 
-export function putProduct(id) {
-	return axios.put(`${process.env.REACT_APP_SERVICE_URL}/product/${id}`);
+export function putProduct(id, payload) {
+	return axios.put(
+		`${process.env.REACT_APP_SERVICE_URL}/product/${id}`,
+		payload
+	);
 }
 
 export function deleteProduct(id) {

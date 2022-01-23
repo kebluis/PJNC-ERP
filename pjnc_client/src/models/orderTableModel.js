@@ -7,6 +7,8 @@ const orderColumns = (onPrint) => {
 			dataIndex: '_id',
 			key: '_id',
 			responsive: ['sm'],
+			width: '5%',
+			render: (text) => <div style={{ wordWrap: 'break-word' }}>{text}</div>,
 		},
 		{
 			title: 'CUSTOMER NAME',
