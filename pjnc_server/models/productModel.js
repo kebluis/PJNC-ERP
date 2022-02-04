@@ -20,6 +20,14 @@ const ProductSchema = new Schema({
 		type: String,
 		required: true,
 	},
+	marketPrice: {
+		type: String,
+		required: true,
+	},
+	supplier: {
+		type: String,
+		required: true,
+	},
 });
 
 // create and export model

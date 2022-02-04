@@ -15,7 +15,7 @@ import ProductSection from '../ProductSection/ProductSection';
 const LayoutSection = () => {
 	const { user, logout } = useAuth0();
 	const { Header, Content, Sider } = Layout;
-	const [collapsed, setCollapse] = useState(false);
+	const [collapsed, setCollapse] = useState(true);
 	const [keySection, setKeySection] = useState('1');
 
 	const setKey = (event) => {
@@ -24,8 +24,9 @@ const LayoutSection = () => {
 
 	return (
 		<>
-			<Layout className="layout-container">
+			<Layout className="layout-container" hasSider>
 				<Sider
+					className="sider-container"
 					collapsible
 					collapsed={collapsed}
 					onCollapse={() => setCollapse(!collapsed)}>
@@ -41,7 +42,10 @@ const LayoutSection = () => {
 						</Menu.Item>
 					</Menu>
 				</Sider>
-				<Layout className="site-layout">
+				<Layout
+					className={`site-layout ${
+						collapsed ? 'layout-detail-sider-off' : 'layout-detail-sider-on'
+					}  `}>
 					<Header className="layout-header">
 						{user.name}
 						<Tooltip

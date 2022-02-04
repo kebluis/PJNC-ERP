@@ -335,7 +335,9 @@ const OrderSection = () => {
 								return (
 									<Col span={6} key={i} className="modal-margin">
 										<label>{comp.label}</label>
+										<br />
 										<Input
+											style={{ width: '100%' }}
 											data={listOrder}
 											dataIndex={comp.dataIndex}
 											type={comp.type}

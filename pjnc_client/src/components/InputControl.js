@@ -37,7 +37,7 @@ const InputControl = (props) => {
 			input = (
 				<InputNumber
 					onChange={changed}
-					style={{ width: 'inherit' }}
+					{...props}
 					onKeyDown={autoSubmit}
 					value={data[dataIndex]}
 				/>
@@ -46,7 +46,7 @@ const InputControl = (props) => {
 		case 'amount':
 			input = (
 				<InputNumber
-					style={{ width: 'inherit' }}
+					{...props}
 					min="0"
 					step="0.50"
 					onChange={changed}

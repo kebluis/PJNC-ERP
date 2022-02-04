@@ -2,14 +2,19 @@
 const Product = require('../models/productModel');
 
 // DEFINE CONTROLLER FUNCTIONS
-
+const sortLatestToTop = (arr) => {
+	return arr.reduceRight(function (previous, current) {
+		previous.push(current);
+		return previous;
+	}, []);
+};
 // listAllProducts function - To list all products
 exports.listAllProducts = (req, res) => {
 	Product.find({}, (err, product) => {
 		if (err) {
 			res.status(500).send(err);
 		}
-		res.status(200).json(product);
+		res.status(200).json(sortLatestToTop(product));
 	});
 };
 
