@@ -1,23 +1,10 @@
-import { DeleteOutlined } from '@ant-design/icons';
-
 export const mainProductTable = () => {
 	return [
-		// {
-		// 	title: 'PRODUCT ID',
-		// 	dataIndex: '_id',
-		// 	key: '_id',
-		// 	responsive: ['sm'],
-		// 	width: '5%',
-		// 	// width: 200,
-		// 	fixed: 'left',
-		// 	render: (text) => <div style={{ wordWrap: 'break-word' }}>{text}</div>,
-		// },
 		{
 			title: 'PRODUCT NAME',
 			dataIndex: 'productName',
 			key: 'productName',
 			width: '30%',
-			// width: 200,
 			fixed: 'left',
 			responsive: ['sm'],
 			render: (text) => <div style={{ wordWrap: 'break-word' }}>{text}</div>,
@@ -26,17 +13,12 @@ export const mainProductTable = () => {
 			title: 'SUPPLIER',
 			dataIndex: 'supplier',
 			key: 'supplier',
-
-			// width: 200,
-
 			responsive: ['sm'],
 		},
 		{
 			title: 'STOCK',
 			dataIndex: 'productStock',
 			key: 'productStock',
-
-			// width: 200,
 			responsive: ['sm'],
 		},
 		{
@@ -44,7 +26,6 @@ export const mainProductTable = () => {
 			dataIndex: 'originalPrice',
 			key: 'originalPrice',
 			width: '20%',
-			// width: 200,
 			fixed: 'right',
 			responsive: ['sm'],
 			render: (text) => <div style={{ wordWrap: 'break-word' }}>{text}</div>,
@@ -54,7 +35,6 @@ export const mainProductTable = () => {
 			dataIndex: 'marketPrice',
 			key: 'marketPrice',
 			width: '20%',
-			// width: 200,
 			fixed: 'right',
 			responsive: ['sm'],
 			render: (text) => <div style={{ wordWrap: 'break-word' }}>{text}</div>,

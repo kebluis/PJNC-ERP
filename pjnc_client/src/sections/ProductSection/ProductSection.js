@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './ProductSection.less';
 import Hotkeys from 'react-hot-keys';
 import GenericModal from '../../components/modal/GenericModal';
-import { Card, message, Form, Row, Col, Typography } from 'antd';
+import { Card, Form, Row, Col } from 'antd';
 
 import GenericButton from '../../components/GenericButton';
 import GenericTable from '../../components/table/GenericTable';
@@ -15,13 +15,10 @@ import {
 import { mainProductTable, newProductForm } from '../../models/productModels';
 import Input from '../../components/InputControl';
 
-import { PrinterOutlined } from '@ant-design/icons';
-
 const ProductSection = () => {
 	const [showCreate, setShowCreate] = useState(false);
 	const [editFlag, setEditFlag] = useState(false);
 	const [productData, setProductData] = useState([]);
-	const [productTbl, setProductTbl] = useState([]);
 	const [listProduct, setListProduct] = useState({
 		_id: null,
 		productName: null,

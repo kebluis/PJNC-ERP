@@ -61,7 +61,6 @@ const InputControl = (props) => {
 					className="full-width"
 					onChange={changed}
 					onKeyDown={autoSubmit}
-					// defaultValue={moment('2015-01-01', 'YYYY-MM-DD')}
 					value={
 						data[dataIndex]
 							? moment(new Date(data[dataIndex]))
