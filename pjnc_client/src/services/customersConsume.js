@@ -16,5 +16,7 @@ export function putCustomer(id, payload) {
 }
 
 export function deleteCustomer(id) {
-	return axios.delete(`${process.env.REACT_APP_SERVICE_URL}/customer/${id}`);
+	return axios.put(
+		`${process.env.REACT_APP_SERVICE_URL}/customer/delete/${id}`
+	);
 }

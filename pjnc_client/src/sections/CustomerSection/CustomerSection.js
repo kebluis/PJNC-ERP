@@ -10,6 +10,7 @@ import {
 	getCustomer,
 	postCustomer,
 	putCustomer,
+	deleteCustomer,
 } from '../../services/customersConsume';
 import { getProduct } from '../../services/productsConsume';
 import customerTableModel from '../../models/customerTableModel';
@@ -19,11 +20,12 @@ import {
 } from '../../models/newCustomerModel';
 import Input from '../../components/InputControl';
 
-import { PrinterOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 
 const CustomerSection = () => {
 	const [showCreate, setShowCreate] = useState(false);
 	const [editFlag, setEditFlag] = useState(false);
+	const [deleteItem, setDeleteItem] = useState({});
 	const [customerData, setCustomerData] = useState([]);
 	const [productData, setProductData] = useState([]);
 	const [customerTbl, setCustomerTbl] = useState([]);
@@ -55,12 +57,12 @@ const CustomerSection = () => {
 					width: '5%',
 					// width: 200,
 					fixed: 'right',
-					render: (text) => (
+					render: (rowData) => (
 						<div style={{ wordWrap: 'break-word' }}>
-							<PrinterOutlined
+							<DeleteOutlined
 								onClick={(e) => {
 									e.stopPropagation();
-									// onPrint(data);
+									setDeleteItem(rowData);
 								}}
 							/>
 						</div>
@@ -73,22 +75,37 @@ const CustomerSection = () => {
 		});
 	}, []);
 
-	const getCustomerData = (products) => {
-		getCustomer().then((res) => {
-			const data = res.data.map((cst) => {
-				return {
-					...cst,
-					...products.reduce((prev, item) => {
-						return Object.assign(prev, {
-							[item.productName.replace(' ', '')]: cst.customerPrice
-								? cst.customerPrice[item.productName]?.price ??
-								  item.originalPrice
-								: item.originalPrice,
-						});
-					}, {}),
-				};
+	useEffect(() => {
+		if (Object.keys(deleteItem).length) {
+			deleteCustomer(deleteItem._id).then((res) => {
+				const deleteCustomer = customerData.filter(
+					(item) => item._id !== deleteItem._id
+				);
+				setCustomerData([...deleteCustomer]);
 			});
+		}
+		return () => {
+			setDeleteItem({});
+		};
+	}, [deleteItem]);
 
+	const getCustomerData = (products) => {
+		return getCustomer().then((res) => {
+			const data = res.data
+				.map((cst) => {
+					return {
+						...cst,
+						...products.reduce((prev, item) => {
+							return Object.assign(prev, {
+								[item.productName.replace(' ', '')]: cst.customerPrice
+									? cst.customerPrice[item.productName]?.price ??
+									  item.originalPrice
+									: item.originalPrice,
+							});
+						}, {}),
+					};
+				})
+				.filter((item) => item.isDeleted === false);
 			setCustomerData(data);
 		});
 	};
@@ -138,16 +155,17 @@ const CustomerSection = () => {
 		const payload = buildPayload();
 		postCustomer(payload).then((res) => {
 			console.log(res);
-			getCustomerData(productData);
-			setShowCreate(false);
-			setEditFlag(false);
-			setNewSpecialPrice([]);
-			setListCustomer({
-				_id: null,
-				customerName: null,
-				location: null,
-				productName: null,
-				customerPrice: null,
+			getCustomerData(productData).then(() => {
+				setShowCreate(false);
+				setEditFlag(false);
+				setNewSpecialPrice([]);
+				setListCustomer({
+					_id: null,
+					customerName: null,
+					location: null,
+					productName: null,
+					customerPrice: null,
+				});
 			});
 		});
 	};
@@ -287,6 +305,7 @@ const CustomerSection = () => {
 					</div>
 					<div>
 						<GenericTable
+							loading={customerData.length === 0}
 							click={modifyCustomer}
 							columns={customerTbl}
 							data={customerData}

@@ -43,10 +43,20 @@ exports.updateCustomer = (req, res) => {
 
 // deleteCustomer function - To delete customer by id
 exports.deleteCustomer = async (req, res) => {
-	await Customer.deleteOne({ _id: req.params.id }, (err) => {
-		if (err) {
-			return res.status(404).send(err);
+	// await Customer.deleteOne({ _id: req.params.id }, (err) => {
+	// 	if (err) {
+	// 		return res.status(404).send(err);
+	// 	}
+	// 	res.status(200).json({ message: 'Customer successfully deleted' });
+	// });
+	Customer.findByIdAndUpdate(
+		req.params.id,
+		{ isDeleted: true },
+		(err, customer) => {
+			if (err) {
+				res.status(500).send(err);
+			}
+			res.status(200).json(customer);
 		}
-		res.status(200).json({ message: 'Customer successfully deleted' });
-	});
+	);
 };

@@ -12,9 +12,9 @@ module.exports = (app) => {
 		.get(customerList.listAllCustomers)
 		.post(customerList.createNewCustomer);
 
-	// put and delete request for /customers endpoints
-	app
-		.route('/customer/:id')
-		.put(customerList.updateCustomer)
-		.delete(customerList.deleteCustomer);
+	// put request for /customers endpoints
+	app.route('/customer/:id').put(customerList.updateCustomer);
+
+	// delete request for /customers endpoints
+	app.route('/customer/delete/:id').put(customerList.deleteCustomer);
 };

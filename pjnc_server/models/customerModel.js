@@ -19,6 +19,11 @@ const CustomerSchema = new Schema({
 	customerPrice: {
 		type: Object,
 	},
+	isDeleted: {
+		type: Boolean,
+		required: true,
+		default: false,
+	},
 });
 
 // create and export model
