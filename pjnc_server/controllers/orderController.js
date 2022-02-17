@@ -13,7 +13,6 @@ exports.listAllOrders = (req, res) => {
 	Order.find()
 		.populate('customer')
 		.then((data) => {
-			console.log(data);
 			res.status(200).json(sortLatestToTop(data));
 		});
 };
@@ -21,7 +20,6 @@ exports.listAllOrders = (req, res) => {
 // createNewOrder function - To create new order
 exports.createNewOrder = (req, res) => {
 	const newOrder = new Order(req.body);
-	console.log(newOrder);
 	newOrder.save().then(console.log).catch(console.error);
 	res.json(newOrder);
 };

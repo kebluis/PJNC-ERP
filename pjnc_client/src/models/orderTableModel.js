@@ -1,6 +1,7 @@
 import { PrinterOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 
-const orderColumns = (onPrint) => {
+const orderColumns = (onPrint, onDelete) => {
 	return [
 		// {
 		// 	title: 'ORDER NUMBER',
@@ -52,14 +53,25 @@ const orderColumns = (onPrint) => {
 			responsive: ['sm'],
 			render: (data) => {
 				return (
-					<>
+					<div
+						style={{
+							display: 'flex',
+							columnGap: '10px',
+							justifyContent: 'space-evenly',
+						}}>
 						<PrinterOutlined
 							onClick={(e) => {
 								e.stopPropagation();
 								onPrint(data);
 							}}
 						/>
-					</>
+						<DeleteOutlined
+							onClick={(e) => {
+								e.stopPropagation();
+								onDelete(data);
+							}}
+						/>
+					</div>
 				);
 			},
 		},

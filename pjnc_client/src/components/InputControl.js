@@ -26,10 +26,10 @@ const InputControl = (props) => {
 			input = (
 				<Input
 					type="text"
-					onChange={changed}
+					onChange={changed ?? null}
 					{...props}
-					onKeyDown={autoSubmit}
-					value={data[dataIndex]}
+					onKeyDown={autoSubmit ?? null}
+					value={data[dataIndex] ?? null}
 				/>
 			);
 			break;

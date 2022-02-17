@@ -202,6 +202,7 @@ const ProductSection = () => {
 					</div>
 					<div>
 						<GenericTable
+							loading={productData.length === 0}
 							click={modifyProduct}
 							columns={mainProductTable()}
 							data={productData}

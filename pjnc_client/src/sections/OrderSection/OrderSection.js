@@ -12,7 +12,12 @@ import Input from '../../components/InputControl';
 import orderTableModel from '../../models/orderTableModel';
 import { newOrderForm, newOrderTable } from '../../models/newOrderModel';
 
-import { getOrder, postOrder, putOrder } from '../../services/ordersConsume';
+import {
+	getOrder,
+	postOrder,
+	putOrder,
+	deleteOrder,
+} from '../../services/ordersConsume';
 import { getCustomer } from '../../services/customersConsume';
 import { getProduct } from '../../services/productsConsume';
 import moment from 'moment';
@@ -31,7 +36,8 @@ const OrderSection = () => {
 		item: null,
 		customerPrice: null,
 		totalPrice: null,
-		status: 'Processing',
+		status: 'Preparing',
+		empties: null,
 	});
 	const [options, setOptions] = useState({});
 	const [newOrderData, setNewOrderData] = useState([]);
@@ -56,15 +62,11 @@ const OrderSection = () => {
 				setOptions((prev) => {
 					return {
 						...prev,
-						customerName: res.data.map((item, i) => {
-							return { key: i, label: item.customerName };
-						}),
-					};
-				});
-
-				setOptions((prev) => {
-					return {
-						...prev,
+						customerName: res.data
+							.filter((item) => item.isDeleted === false)
+							.map((item, i) => {
+								return { key: i, label: item.customerName };
+							}),
 						item: productData.map((item, i) => {
 							return { key: i, label: item.productName };
 						}),
@@ -82,7 +84,8 @@ const OrderSection = () => {
 					totalPrice: null,
 					deliveryDate: null,
 					location: null,
-					status: 'Processing',
+					status: 'Preparing',
+					empties: null,
 				};
 			});
 			if (!editFlag) {
@@ -107,7 +110,7 @@ const OrderSection = () => {
 	}, [listOrder.customerName]);
 
 	const getOrderData = () => {
-		getOrder().then((res) => {
+		return getOrder().then((res) => {
 			const orderData = [];
 			res.data.map((order) => {
 				return orderData.push({
@@ -230,6 +233,7 @@ const OrderSection = () => {
 			amountPaid: 0,
 			deliveryDate: listOrder.deliveryDate,
 			status: listOrder.status ?? 'Processing',
+
 			customer:
 				customerData[
 					customerData.findIndex(
@@ -255,9 +259,10 @@ const OrderSection = () => {
 		console.log(payload);
 		postOrder(payload).then((res) => {
 			console.log(res);
-			getOrderData();
-			setShowCreate(false);
-			setEditFlag(false);
+			getOrderData().then(() => {
+				setShowCreate(false);
+				setEditFlag(false);
+			});
 		});
 	};
 
@@ -281,6 +286,7 @@ const OrderSection = () => {
 				location: data.location,
 				deliveryDate: new Date(data.deliveryDate),
 				status: data.status,
+				empties: data.empties,
 			};
 		});
 		setNewOrderData([
@@ -304,11 +310,16 @@ const OrderSection = () => {
 		]);
 	};
 
-	const onPrintOrder = (e) => {
+	const onPrintOrder = (data) => {
 		console.log('Print Receipt');
 	};
+	const onDeleteOrder = (data) => {
+		deleteOrder(data._id).then((res) => {
+			setOrderData(orderData.filter((item) => item._id !== data._id));
+		});
+	};
 
-	const deleteOrder = (data) => {
+	const deleteNewOrder = (data) => {
 		setNewOrderData(newOrderData.filter((item) => item !== data));
 	};
 
@@ -350,8 +361,8 @@ const OrderSection = () => {
 							})}
 						</Row>
 					</Form>
-					<div className="order-create">
-						<span className="space_separator">
+					<div className="order-create grid-wrapper">
+						<span style={{ gridColumn: 1 }}>
 							<label>Status</label>
 							<Input
 								data={listOrder}
@@ -368,12 +379,33 @@ const OrderSection = () => {
 								disabled={!editFlag}
 							/>
 						</span>
-						<span style={{ margin: 'auto 0 8px 0' }}>
+						<span style={{ gridColumn: 2 }}>
+							<label>Empties Returned</label>
+							<br />
+							<Input
+								data={listOrder}
+								dataIndex="empties"
+								type="number"
+								changed={(e) =>
+									setListOrder((prev) => {
+										return {
+											...prev,
+											empties: e,
+										};
+									})
+								}
+								disabled={
+									listOrder.status === 'Preparing' ||
+									listOrder.status === 'Delivering'
+								}
+							/>
+						</span>
+						<span style={{ gridColumn: 4, margin: 'auto 0 0 auto' }}>
 							<GenericButton click={addToTable}>+ ADD</GenericButton>
 						</span>
 					</div>
 					<GenericTable
-						columns={newOrderTable(deleteOrder)}
+						columns={newOrderTable(deleteNewOrder)}
 						data={sortLatestToTop(newOrderData)}
 						pagination={{
 							defaultPageSize: 3,
@@ -396,8 +428,9 @@ const OrderSection = () => {
 					</div>
 					<div>
 						<GenericTable
+							loading={orderData.length === 0}
 							click={onClickOrder}
-							columns={orderTableModel(onPrintOrder)}
+							columns={orderTableModel(onPrintOrder, onDeleteOrder)}
 							data={orderData}
 							pagination={{
 								defaultPageSize: 4,

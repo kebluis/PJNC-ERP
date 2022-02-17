@@ -7,10 +7,12 @@ import {
 	UserOutlined,
 	CoffeeOutlined,
 	LogoutOutlined,
+	DollarOutlined,
 } from '@ant-design/icons';
 import OrderSection from '../OrderSection/OrderSection';
 import CustomerSection from '../CustomerSection/CustomerSection';
 import ProductSection from '../ProductSection/ProductSection';
+import ExpenseSection from '../ExpenseSection/ExpenseSection';
 
 const LayoutSection = () => {
 	const { user, logout } = useAuth0();
@@ -39,6 +41,9 @@ const LayoutSection = () => {
 						</Menu.Item>
 						<Menu.Item key="3" icon={<CoffeeOutlined />} onClick={setKey}>
 							Product Section
+						</Menu.Item>
+						<Menu.Item key="4" icon={<DollarOutlined />} onClick={setKey}>
+							Expense Section
 						</Menu.Item>
 					</Menu>
 				</Sider>
@@ -79,6 +84,7 @@ const LayoutSection = () => {
 							{Number(keySection) === 1 && <OrderSection />}
 							{Number(keySection) === 2 && <CustomerSection />}
 							{Number(keySection) === 3 && <ProductSection />}
+							{Number(keySection) === 4 && <ExpenseSection />}
 						</div>
 					</Content>
 				</Layout>
