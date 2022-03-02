@@ -20,6 +20,10 @@ const ProductSchema = new Schema({
 		type: String,
 		required: true,
 	},
+	emptiesStock: {
+		type: String,
+		required: true,
+	},
 	marketPrice: {
 		type: String,
 		required: true,

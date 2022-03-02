@@ -18,3 +18,17 @@ export function putProduct(id, payload) {
 export function deleteProduct(id) {
 	return axios.delete(`${process.env.REACT_APP_SERVICE_URL}/product/${id}`);
 }
+
+export function changeProductStock(id, payload) {
+	return axios.put(
+		`${process.env.REACT_APP_SERVICE_URL}/product/${id}/stocks`,
+		payload
+	);
+}
+
+export function changeProductEmpties(id, payload) {
+	return axios.put(
+		`${process.env.REACT_APP_SERVICE_URL}/product/${id}/empties`,
+		payload
+	);
+}

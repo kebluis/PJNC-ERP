@@ -17,4 +17,8 @@ module.exports = (app) => {
 		.route('/product/:id')
 		.put(productList.updateProduct)
 		.delete(productList.deleteProduct);
+
+	app.route('/product/:id/empties').put(productList.changeEmpties);
+
+	app.route('/product/:id/stocks').put(productList.changeStocks);
 };

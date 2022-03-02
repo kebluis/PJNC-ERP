@@ -50,3 +50,47 @@ exports.deleteProduct = async (req, res) => {
 		res.status(200).json({ message: 'Product successfully deleted' });
 	});
 };
+
+exports.changeStocks = (req, res) => {
+	// Product.findByIdAndUpdate(
+	// 	req.params.id,
+	// 	{ productStock: req.body.productStock },
+	// 	// {},
+	// 	(err, customer) => {
+	// 		console.log(customer);
+	// 		console.log(req);
+	// 		console.log(res);
+	// 		if (err) {
+	// 			res.status(500).send(err);
+	// 		}
+	// 		res.status(200).json(customer);
+	// 	}
+	// );
+	Product.findById(req.params.id, (err, product) => {
+		if (err) return res.status(500).send(err);
+		console.log('id', req.params.id);
+		console.log('product', product);
+		console.log('requst', req.body);
+		product.emptiesStock =
+			Number(product.emptiesStock) + Number(req.body.emptiesStock);
+
+		product.save((err, updatedProduct) => {
+			if (err) return res.status(500).send(err);
+			res.status(200).json(updatedProduct);
+		});
+	});
+};
+
+exports.changeEmpties = (req, res) => {
+	console.log();
+	Product.findByIdAndUpdate(
+		req.params.id,
+		{ emptiesStock: req.body.emptiesStock },
+		(err, customer) => {
+			if (err) {
+				res.status(500).send(err);
+			}
+			res.status(200).json(customer);
+		}
+	);
+};

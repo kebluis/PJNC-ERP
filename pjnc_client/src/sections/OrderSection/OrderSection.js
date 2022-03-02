@@ -19,7 +19,7 @@ import {
 	deleteOrder,
 } from '../../services/ordersConsume';
 import { getCustomer } from '../../services/customersConsume';
-import { getProduct } from '../../services/productsConsume';
+import { changeProductStock, getProduct } from '../../services/productsConsume';
 import moment from 'moment';
 
 const OrderSection = () => {
@@ -37,7 +37,7 @@ const OrderSection = () => {
 		customerPrice: null,
 		totalPrice: null,
 		status: 'Preparing',
-		empties: null,
+		empties: 0,
 	});
 	const [options, setOptions] = useState({});
 	const [newOrderData, setNewOrderData] = useState([]);
@@ -85,7 +85,7 @@ const OrderSection = () => {
 					deliveryDate: null,
 					location: null,
 					status: 'Preparing',
-					empties: null,
+					empties: 0,
 				};
 			});
 			if (!editFlag) {
@@ -233,7 +233,6 @@ const OrderSection = () => {
 			amountPaid: 0,
 			deliveryDate: listOrder.deliveryDate,
 			status: listOrder.status ?? 'Processing',
-
 			customer:
 				customerData[
 					customerData.findIndex(
@@ -258,6 +257,8 @@ const OrderSection = () => {
 		const payload = buildPayload();
 		console.log(payload);
 		postOrder(payload).then((res) => {
+			debugger;
+			// changeProductStock
 			console.log(res);
 			getOrderData().then(() => {
 				setShowCreate(false);
